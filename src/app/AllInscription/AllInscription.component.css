@@ -1,0 +1,16 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh; /* Ajustez selon vos besoins */
+}
+
+.content {
+    flex: 1;
+    overflow-y: auto; /* Pour permettre le défilement si le contenu est plus grand que la hauteur */
+  
+}
+.cd{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
