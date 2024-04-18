@@ -7,10 +7,5 @@
 .content {
     flex: 1;
     overflow-y: auto; /* Pour permettre le défilement si le contenu est plus grand que la hauteur */
-  
-}
-.cd{
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
+    padding-left: 320px;
 }
