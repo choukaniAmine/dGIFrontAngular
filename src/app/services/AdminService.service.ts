@@ -31,5 +31,30 @@ return this.http.post(`${BASIC_URL}/api/admin/accept`,compte,{
 });
 
 }
+getAllComptes(): Observable<any> {
+  return this.http.get(BASIC_URL + "/api/admin/lescompte", {
+    headers: this.createAuthorizationHeader()
+  })
+}
+bloqueCompte(compteDto: any): Observable<any> {
+  return this.http.post<any>(BASIC_URL + '/api/admin/bloqueCompte', compteDto, {
+    headers: this.createAuthorizationHeader()
+  });
+}
 
+debloqueCompte(compteDto: any): Observable<any> {
+  return this.http.post<any>(BASIC_URL + '/api/admin/debloqueCompte', compteDto, {
+    headers: this.createAuthorizationHeader()
+  });
+}
+getAllContribuale(): Observable<any> {
+  return this.http.get(BASIC_URL + "/api/admin/lesContribuables", {
+    headers: this.createAuthorizationHeader()
+  })
+}
+changePassword(req: any): Observable<any> {
+  return this.http.post<any>(BASIC_URL + '/api/admin/changepassword', req, {
+    headers: this.createAuthorizationHeader()
+  });
+}
 }

@@ -1,17 +1,20 @@
 .sidebar-content {
-    padding: 20px;
+    padding: 10px;
   }
   
-  
-  
+  p-sidebar {
+    position: relative;
+  }
   
   .sidebar-menu {
     list-style-type: none;
     padding: 0;
+    
   }
   
   .sidebar-menu li {
     margin-bottom: 10px;
+    color: #fdf0d5;
   }
   
   .sidebar-menu li a {
@@ -28,7 +31,6 @@
   }
   
   .admin-section {
-    position: fixed;
     bottom: 20px;
     left: 20px;
   }
@@ -54,4 +56,6 @@
   .logout-button:hover {
     background-color: #c82333;
   }
-  
+  h1{
+    color: #fdf0d5;
+  }

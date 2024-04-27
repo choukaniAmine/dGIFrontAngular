@@ -9,17 +9,17 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { CalendarModule } from 'primeng/calendar';
-
+import { ToastModule } from 'primeng/toast';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxCaptchaModule } from 'ngx-captcha';
-import { Console } from 'console';
-
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 @Component({
   selector: 'app-Inscription',
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule, StepsModule,
     FieldsetModule,
-    ButtonModule, CardModule, CalendarModule, ReactiveFormsModule,NgxCaptchaModule],
+    ButtonModule, CardModule, CalendarModule, ReactiveFormsModule,NgxCaptchaModule,ToastModule,ConfirmDialogModule],
   templateUrl: './Inscription.component.html',
 
   styleUrls: ['./Inscription.component.css']
@@ -63,10 +63,11 @@ export class InscriptionComponent implements OnInit {
     numerodequittance: '',
   }
 
-  constructor(private inscservice:InscriptionServiceService) { this.siteKey = '6Lf62rApAAAAANTrndxnTO0Npv3pBj5uJgQY2nba'}
+  constructor(private authserve:InscriptionServiceService,private messageService: MessageService, private confirmationService: ConfirmationService) { this.siteKey = '6Lf62rApAAAAANTrndxnTO0Npv3pBj5uJgQY2nba'}
 
   ngOnInit() {
   }
+  /*
   onSubmit() {
     this.inscservice.getContribuableByMatriculeFiscale(Number(this.formData.numeroFiscal)).subscribe((data) => {
       this.contribuable = data;
@@ -95,7 +96,7 @@ console.log('ili b3aththa:',signupRequest);
 
     });
   }
-
+*/
 
 
   nextStep() {
@@ -103,10 +104,10 @@ console.log('ili b3aththa:',signupRequest);
     this.submitted = true;
 
     if (this.validateForm()) {
-      this.inscservice.getAllInscription().subscribe((inscriptionList) => {
+      this.authserve.getAllInscription().subscribe((inscriptionList) => {
         this.lesinscriptions = inscriptionList;
 
-        this.inscservice.getContribuableByMatriculeFiscale(Number(this.formData.numeroFiscal)).subscribe(
+        this.authserve.getContribuableByMatriculeFiscale(Number(this.formData.numeroFiscal)).subscribe(
           (data) => {
             this.contribuable = data;
 
@@ -116,7 +117,8 @@ console.log('ili b3aththa:',signupRequest);
             });
 
             if (contribuableExists) {
-              alert("Contribuable has already done the sign up");
+              // alert("Contribuable has already done the sign up");
+              this.messageService.add({ key: 'step1', severity: 'error', summary: 'Error', detail: 'contribuable a deja fait linscription' });
               return; // Exit the function early if the contribuable exists
             }
 
@@ -135,19 +137,25 @@ console.log('ili b3aththa:',signupRequest);
 
             // Compare the dates if currentDate is not null
             if (currentDateOnly && contribuableDateOnly.getTime() === currentDateOnly.getTime()) {
-              alert("Contribuable found");
-              this.activeIndex++;
-              this.submitted = false; // Proceed to the next step if the contribuable is found
+              //alert("Contribuable found");
+              this.messageService.add({ key: 'step1', severity: 'success', summary: 'Success', detail: 'contribuable trouvé !!' });
+              //this.activeIndex++;
+              setTimeout(() => {
+                this.submitted = false;
+                this.activeIndex++;
+              }, 2000); // Proceed to the next step if the contribuable is found
             } else {
               console.log(this.contribuable);
               console.log(this.contribuable.dateDeMatriculation);
               console.log(this.date);
-              alert("Contribuable not found");
+              //alert("Contribuable not found");
+              this.messageService.add({ key: 'step1', severity: 'error', summary: 'Error', detail: 'contribuable introuvable' });
             }
           },
           (error) => {
-            console.error("Error fetching contribuable:", error);
-            alert("An error occurred while fetching the contribuable");
+            //console.error("Error fetching contribuable:", error);
+            //alert("An error occurred while fetching the contribuable");
+            this.messageService.add({ key: 'step1', severity: 'error', summary: 'Error', detail: 'contribuable introuvable' });
           }
         );
       });
@@ -169,20 +177,61 @@ console.log('ili b3aththa:',signupRequest);
   }
   handleSuccess(event: any) {
     this.valid = true;
-    console.log(this.valid);// Set the valid flag to true when the recaptcha is successfully validated
+    console.log(this.valid);
   }
 
-  // Function to handle recaptcha error
   handleError() {
-    this.valid = false; // Set the valid flag to false when there's an error with recaptcha validation
+    this.valid = false;
   }
 
   prevStep() {
     this.activeIndex--;
+    this.submitted = false;
   }
 
-  submit() {
-    // Submit logic
+  //step deux
+  nextStep1() {
+    this.submitted = true;
+    const iddecalaration = this.formData.numerodequittance;
+    const dateDeQuittance = this.date2 ? formatDate(this.date2, 'yyyy-MM-dd', 'en-US') : null;
+    //console.log("contribuable", this.contribuable)
+    //console.log("iddeclarartion", iddecalaration)
+    //console.log("datequittance", dateDeQuittance)
+    const request = {
+      cd: this.contribuable,
+      iddecalaration: iddecalaration
+
+    }
+    if (this.validateForm1()) {
+      this.authserve.checkDeclaration(request).subscribe(
+        (response) => {
+          console.log(response)
+          if (response && response.dateDeclaration) {
+            const apiDateOnly = response.dateDeclaration.split('T')[0];
+            console.log(apiDateOnly)
+            if (apiDateOnly === dateDeQuittance) {
+              this.messageService.add({ key: 'step2', severity: 'success', summary: 'Success', detail: 'Verification validé' });
+              setTimeout(() => {
+                this.submitted = false;
+                this.activeIndex++;
+              }, 2000);
+            } else {
+              //console.log('Date does not match');
+              this.messageService.add({ key: 'step2', severity: 'error', summary: 'Error', detail: 'Verification non validé' });
+            }
+          } else {
+
+            // console.log('Date does not match or declaration not found');
+            this.messageService.add({ key: 'step2', severity: 'error', summary: 'Error', detail: 'Verification non validé' });
+          }
+        },
+        (error) => {
+          console.error('Error:', error);
+          this.messageService.add({ key: 'step2', severity: 'error', summary: 'Error', detail: 'Something went wrong' });
+
+        }
+      );
+    }
   }
   validateForm1(): boolean {
     if (!this.formData.numerodequittance) {
@@ -196,38 +245,6 @@ console.log('ili b3aththa:',signupRequest);
     }
     return true;
   }
-nextStep1(){
- 
-  this.submitted = true;
-  const dateDeQuittance=this.date2 ? formatDate(this.date2,'yyyy-MM-dd','en-US'):null;
-  const request={
-    idDeclaration:this.formData.numerodequittance,
-  cd :this.contribuable,
-   
-  }
-  console.log(request)
-  if(this.validateForm1())
-  this.inscservice.checkDeclaration(request).subscribe(response=>{
- const dateFromBackend = response.dateDeclaration.split('T')[0];
- console.log(response);
-console.log(dateDeQuittance);
-console.log(dateFromBackend);
-        if (dateFromBackend === dateDeQuittance) {
-          // Les dates correspondent
-          console.log('Les dates correspondent.');
-          this.activeIndex++;
-          this.submitted = false;
-        } else {
-          // Les dates ne correspondent pas
-          alert('Les dates ne correspondent pas.');
-        }
-      }, error => {
-        // Gérer les erreurs ici
-        console.error(error);
-      });
-  }
-
-  
   validateForm2(): boolean {
     if (!this.formData.email) {
       return false;
@@ -239,7 +256,7 @@ console.log(dateFromBackend);
     if (!this.formData.poste) {
       return false;
     }
-  if (!this.inputValue) {
+    if (!this.inputValue) {
       return false;
     }
     if (!this.valid) {
@@ -247,35 +264,67 @@ console.log(dateFromBackend);
     }
     return true;
   }
-  nextStep2() {
+  confirm() {
+    const emailInput = document.getElementById('email') as HTMLInputElement;
+    const email = emailInput.value.trim();
+    if (!email || !emailInput.validity.valid) {
+      console.log('Email is invalid');
+      this.messageService.add({ key: 'step3', severity: 'error', summary: 'Error', detail: 'Votre email est invalid' });
+      return;
+    }
+    if (this.validateForm2()) {
+      this.confirmationService.confirm({
+        message: 'Etes vous sur de confirmation de formulaire ?',
+        accept: () => {
+          this.nextStep2()
+        }
+      });
+    }
 
+  }
+  //step trois
+  nextStep2() {
+    const emailInput = document.getElementById('email') as HTMLInputElement;
+    const email = emailInput.value.trim();
+
+    // Check if the email is empty or invalid
+    if (!email || !emailInput.validity.valid) {
+      console.log('Email is invalid');
+      this.messageService.add({ key: 'step3', severity: 'error', summary: 'Error', detail: 'Votre email est invalid' });
+      return;
+    }
     const signupRequest = {
       email: this.formData.email,
       password: null,
-      name: this.formData.name,
-  
+      nom: this.formData.name,
+
       numeroFiscal: this.formData.numeroFiscal,
       poste: this.formData.poste,
       typeIdentifiant: this.selectedType,
-      valeurIdentifiant: this.inputValue,
+      valueIdentifiant: this.inputValue,
       contribuable: this.contribuable
     };
     console.log(signupRequest)
     this.submitted = true;
+
     if (this.validateForm2()) {
 
-      this.inscservice.register(signupRequest).subscribe(response => {
+      this.authserve.register(signupRequest).subscribe(response => {
         console.log('User registered successfully:', response);
-
+        this.messageService.add({ key: 'step3', severity: 'success', summary: 'registrer', detail: 'Votre inscription est validé !' });
+        setTimeout(() => {
+          this.submitted = false;
+          this.activeIndex++;
+        }, 2000);
       }, error => {
         console.error('Error occurred during registration:', error);
-
+        this.messageService.add({ key: 'step3', severity: 'error', summary: 'Error', detail: 'Something went wrong' });
       });
+
     } else {
       console.log("cant be clicked");
+      this.messageService.add({ key: 'step3', severity: 'error', summary: 'Error', detail: 'votre formulaire est invalide' });
     }
 
   }
-
-
 }

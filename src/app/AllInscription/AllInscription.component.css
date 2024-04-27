@@ -1,11 +1,23 @@
-.container {
+.dashboard-content {
+    width: 83%;
+  }
+  
+  
+  
+  .full-w{
     display: flex;
-    flex-direction: row;
-    height: 100vh; /* Ajustez selon vos besoins */
-}
-
-.content {
-    flex: 1;
-    overflow-y: auto; /* Pour permettre le défilement si le contenu est plus grand que la hauteur */
-    padding-left: 320px;
-}
+    justify-content: end;
+    align-items: end;
+    gap: 10px;
+  }
+  .empty-message {
+    text-align: center;
+    margin-top: 20px; /* Adjust the margin as needed */
+    padding: 100px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+ 

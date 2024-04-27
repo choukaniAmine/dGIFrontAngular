@@ -6,19 +6,23 @@ import {  TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { AdminSidebarComponent } from '../AdminSidebar/AdminSidebar.component';
 import { MessagesModule } from 'primeng/messages';
-import { Router } from '@angular/router';
+import { CardModule } from 'primeng/card';
 import { StorageServiceService } from '../services/StorageService.service';
+import { Router } from '@angular/router';
 @Component({
-  selector: 'app-AllInscription',
+  selector: 'app-AdminHomePage',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, TagModule,AdminSidebarComponent,MessagesModule],
-  templateUrl: './AllInscription.component.html',
-  styleUrls: ['./AllInscription.component.css']
+  imports: [CommonModule, TableModule, ButtonModule, TagModule,AdminSidebarComponent,MessagesModule,CardModule],
+  templateUrl: './AdminHomePage.component.html',
+  styleUrls: ['./AdminHomePage.component.css']
 })
-export class AllInscriptionComponent implements OnInit {
-inscription:any=[];
-comptes:any=[];
-
+export class AdminHomePageComponent implements OnInit {
+  inscription:any=[];
+  comptes:any=[];
+  lesContribuables: any = [];
+  totalinscription:any;
+totalcomptes:any;
+totalcontribuable:any;
   constructor(private adminService:AdminServiceService,private router: Router) { }
 
   ngOnInit() {
@@ -27,17 +31,20 @@ comptes:any=[];
     }
     else{
     this.getAllInscri();
-    this.getAllComptes();}
+    this.getAllComptes();
+    this.getAllContribuable();}
   }
   getAllInscri() {
     this.adminService.getAllInscription().subscribe((res) => {
       console.log(res);
       this.inscription = res.filter((inscription: { email: string }) => 
         !this.comptes.find((compte: { email: string }) => compte.email === inscription.email)
-
       );
+      this.totalinscription=this.inscription.length;
     });
+
   
+
   }
   
   
@@ -47,19 +54,19 @@ comptes:any=[];
       this.comptes = res.filter((compte: { userRole: string; }) => compte.userRole !== 'Admin');
       console.log("lescomptes:", this.comptes);
       // After fetching comptes, update the inscription array
+      this.totalcomptes=this.comptes.length;
       this.getAllInscri();
     });
+
+  }
+  getAllContribuable() {
+    this.adminService.getAllContribuale().subscribe((res) => {
+
+      this.lesContribuables = res;
+      console.log(this.lesContribuables)
+      this.totalcontribuable=this.lesContribuables.length;
+    })
+   
   }
   
-getSeverity(enabled: boolean): string {
-  return enabled ? 'success' : 'danger';
-}
-accepterUtilisateur(inscription: any): void {
-  
-  console.log(inscription);
- this.adminService.acceptCompte(inscription).subscribe((res)=>{
-  console.log(res);
-  this.ngOnInit();
- })
-}
 }

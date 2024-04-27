@@ -47,4 +47,7 @@ export class StorageServiceService {
     const role: string = this.getUserRole();
     return role === 'Client';
   }
+ static clearFromLocalStorage(): void {
+   window.localStorage.clear();
+  }
 }

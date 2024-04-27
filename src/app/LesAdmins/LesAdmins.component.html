@@ -1,0 +1,16 @@
+<div class="full-w">
+  <div class="dashboard-content">
+      <app-AdminSidebar></app-AdminSidebar>
+<div class="p-col-10" >
+  <h2>Les Admins</h2>
+  <ng-container *ngFor="let admin of comptes">
+    <p-card [style]="{ width: '300px', margin: '10px' }">
+      <ng-template pTemplate="header">
+      </ng-template>
+      <div style="display: flex; align-items: center;">
+        <i class="pi pi-user" style="font-size: 2em;"></i>
+        <div>{{ admin.email }}</div>
+      </div>
+    </p-card>
+  </ng-container>
+</div>

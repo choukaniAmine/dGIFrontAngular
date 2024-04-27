@@ -1,10 +1,36 @@
-
-<div class="container">
+<div class="full-w">
+<div class="dashboard-content">
     <app-AdminSidebar></app-AdminSidebar>
     <div class="content">
 <div class="p-grid p-justify-center" >
   <div class="p-col-10">
     <h2>All Inscriptions</h2>
+    <ng-container *ngIf="inscription.length === 0; else inscriptionsTable">
+        <p-table [value]="inscription" dataKey="id">
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 5rem"></th>
+              <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
+              <th>Type Identifiant</th>
+              <th>Valeur Identifiant</th>
+              <th>Nom</th>
+              <th>PrÃ©nom</th>
+              <th>Enabled</th>
+              <th>Poste</th>
+              <th>Action</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="9" style="text-align: center;">Aucune inscription</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </ng-container>
+      
+      
+      
+      <ng-template #inscriptionsTable>
     <p-table [value]="inscription" dataKey="id">
       <ng-template pTemplate="header">
           <tr>
@@ -76,7 +102,7 @@
         </tr>
     </ng-template>
   </p-table>
-
+      </ng-template>
   </div>
 </div>
-    </div></div>
+    </div></div></div>

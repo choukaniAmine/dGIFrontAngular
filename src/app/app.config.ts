@@ -6,7 +6,9 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideClientHydration(),provideHttpClient(withFetch()),provideAnimations(), provideAnimationsAsync()]
+  providers: [provideRouter(routes), provideClientHydration(),provideHttpClient(withFetch()),provideAnimations(), provideAnimationsAsync(),
+    MessageService, ConfirmationService]
 };
