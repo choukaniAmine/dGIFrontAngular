@@ -1,0 +1,35 @@
+.dashboard-content {
+    width: 83%;
+  }
+  
+  
+  
+  .full-w{
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    gap: 10px;
+  }
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px; 
+  }
+  .title-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .title-container h2 {
+    margin-right: 10px; 
+  }
+  .title-container button
+  {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+  }
+  tr:hover{
+    background-color: rgba(0, 0, 0, 0.749);
+  }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../../services/Client.service';
 import { CardModule } from 'primeng/card';
 import { StorageServiceService } from '../../services/StorageService.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-homePage',
   standalone: true,
@@ -12,7 +13,7 @@ import { StorageServiceService } from '../../services/StorageService.service';
 export class HomePageComponent implements OnInit {
 userid!:number;
 contribuable:any;
-  constructor(private clientService:ClientService) { }
+  constructor(private clientService:ClientService , private router:Router) { }
 
   ngOnInit() {
     this.getcontribuable();
@@ -49,9 +50,10 @@ logout(): void {
   StorageServiceService.clearFromLocalStorage();
 }
 contribuablePage() {
-  const contribuableId = this.contribuable.idContribuable;
+  const contribuableMatricule = this.contribuable.matriculeFiscale ;
 
-
-  localStorage.setItem('contribuableId', contribuableId);
+console.log(contribuableMatricule)
+  localStorage.setItem('contribuableMatricule', contribuableMatricule);
+  this.router.navigate(['/navbarclient']);
 }
 }

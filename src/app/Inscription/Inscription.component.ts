@@ -194,12 +194,14 @@ console.log('ili b3aththa:',signupRequest);
     this.submitted = true;
     const iddecalaration = this.formData.numerodequittance;
     const dateDeQuittance = this.date2 ? formatDate(this.date2, 'yyyy-MM-dd', 'en-US') : null;
-    //console.log("contribuable", this.contribuable)
-    //console.log("iddeclarartion", iddecalaration)
-    //console.log("datequittance", dateDeQuittance)
+    console.log("contribuable", this.contribuable)
+    console.log("iddeclarartion", iddecalaration)
+    console.log("datequittance", dateDeQuittance)
+    console.log(this.contribuable)
     const request = {
-      cd: this.contribuable,
-      iddecalaration: iddecalaration
+      idDeclaration: iddecalaration,
+      cd: this.contribuable
+      
 
     }
     if (this.validateForm1()) {

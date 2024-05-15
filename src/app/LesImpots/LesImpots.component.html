@@ -1,0 +1,27 @@
+<div class="full-w">
+  <div class="dashboard-content">
+    <app-AdminSidebar></app-AdminSidebar>
+    <div class="p-col-10">
+      <div class="title-container">
+        <h2>Tous les Impots</h2>
+        <button pButton type="button" icon="pi pi-plus" (click)="submit()" label="Ajout impot"></button>
+      </div>
+
+
+      <p-table [value]="lesimpots">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Libelle</th>
+            <th>Periode</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-impot>
+          <tr [routerLink]="['/admin/detailimpot',impot.libelle]">
+            <td>{{ impot.libelle }}</td>
+            <td>{{ impot.periodicite.periode }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

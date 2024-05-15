@@ -27,7 +27,39 @@ getContribuableByIdCompte(id: number): Observable<any> {
   });
 }
 savereclamation(reclamation: any) {
+  
+  return this.http.post(`${BASIC_URL}/api/client/savereclamation`, reclamation, { headers: this.createAuthorizationHeader() });
+}
+saveDeclaration(declarationdto: any) {
   const headers: HttpHeaders = this.createAuthorizationHeader();
-  return this.http.post(`${BASIC_URL}/api/client/savereclamation`, reclamation, { headers });
+  return this.http.post(`${BASIC_URL}/api/client/declaration`, declarationdto, { headers: this.createAuthorizationHeader() });
+}
+getObligationById(id: number) {
+  const url = `${BASIC_URL}/api/client/obligationbycontribuable/${id}`;
+  return this.http.get<any>(url, { headers: this.createAuthorizationHeader() });
+}
+getContribuableBymatricule(matricule: number) {
+  return this.http.get(`${BASIC_URL}/api/client/contribuableMatricule?matriculeFiscale=${matricule}`, { headers: this.createAuthorizationHeader() })
+}
+gettypeDeclaration() {
+  const url = `${BASIC_URL}/api/client/lestypedeclaration`;
+  return this.http.get<any>(url, { headers: this.createAuthorizationHeader() });
+}
+updateDetailDeclaration(declarationdto: any) {
+  const url = `${BASIC_URL}/api/client/updatedetaildeclaration`;
+  const headers: HttpHeaders = this.createAuthorizationHeader();
+  return this.http.put(url, declarationdto, { headers });
+}
+calculateEquation(calculateRequest: any) {
+  const url = `${BASIC_URL}/api/client/calculate`;
+  const headers: HttpHeaders = this.createAuthorizationHeader();
+  return this.http.post(url, calculateRequest, { headers });
+
+}
+getFormulaByLibelle(libelle: string) {
+  const url = `${BASIC_URL}/api/client/formule?libelle=${libelle}`;
+  return this.http.get<any>(url, {
+    headers: this.createAuthorizationHeader()
+  });
 }
 }
