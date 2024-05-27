@@ -90,7 +90,9 @@ export class AjoutDeclarationComponent implements OnInit {
       (data: any) => { // Add type assertion here
         this.hashMapEntries = data;
         console.log(data);
+        this.getFormule();
         this.displayPopup = true;
+      
       },
       (error) => {
         console.error('Error saving declaration:', error);
@@ -100,15 +102,40 @@ export class AjoutDeclarationComponent implements OnInit {
   parseEntryKey(key: string): any {
     const libelleIndex = key.indexOf('libelle=');
     if (libelleIndex === -1) {
-      return ''; // Return an empty string if 'libelle=' is not found
+      return '';
     }
+    let libelle = '';
     const startIndex = libelleIndex + 'libelle='.length;
     const endIndex = key.indexOf(',', startIndex);
     if (endIndex === -1) {
-      return ''; // Return an empty string if ',' is not found after 'libelle='
+      libelle = key.substring(startIndex);
+    } else {
+      libelle = key.substring(startIndex, endIndex);
     }
-    return key.substring(startIndex, endIndex);
 
+    const obligatoireIndex = key.indexOf('obligatoire=true');
+    if (obligatoireIndex !== -1) {
+      libelle += ' *';
+    }
+
+    const natureRebriqueIndex = key.indexOf('naturerebrique=');
+    if (natureRebriqueIndex !== -1) {
+      const natureStartIndex = natureRebriqueIndex + 'naturerebrique='.length;
+      const natureEndIndex = key.indexOf(',', natureStartIndex);
+      let natureRebrique = '';
+      if (natureEndIndex === -1) {
+        natureRebrique = key.substring(natureStartIndex);
+      } else {
+        natureRebrique = key.substring(natureStartIndex, natureEndIndex);
+      }
+      if (natureRebrique === 'REVENUS') {
+        libelle += ' (r)';
+      } else if (natureRebrique === 'PERTE') {
+        libelle += ' (p)';
+      }
+    }
+
+    return libelle;
   }
   submit1() {
     //console.log(this.hashMapEntries);
@@ -127,6 +154,7 @@ export class AjoutDeclarationComponent implements OnInit {
       responses => {
         console.log('All updates successful', responses);
         this.getDetailType(this.hashMapEntries);
+
       },
       error => {
         console.error('An error occurred during updates', error);
@@ -174,8 +202,12 @@ export class AjoutDeclarationComponent implements OnInit {
      this.clientservice.calculateEquation(calculateRequest).subscribe((data) => console.log(data))
   })
   }
-  calcul(){
-    console.log(this.obligation.typeImpot.libelle)
-    this.clientservice.getFormulaByLibelle(this.obligation.typeImpot.libelle).subscribe((data) => console.log(data.formule))
+  formule:any;
+  getFormule() {
+    this.clientservice.getFormulaByLibelle(this.obligation.typeImpot.libelle).subscribe((data) => {
+      console.log(data);
+      this.formule = data.formule;
+
+    });
   }
 }

@@ -58,6 +58,16 @@
       </tbody>
     </table>
     <p-button label="Suivant" icon="pi pi-arrow-right" (onClick)="submit1()" iconPos="right"></p-button>
-    <p-button label="calcul" icon="pi pi-arrow-right" (onClick)="calcul()" iconPos="right"></p-button>
+    <div class="tooltip">
+      <p-button icon="pi pi-info-circle" [rounded]="true"></p-button>
+      <span class="tooltiptext">
+        <ul style="list-style-type: none; padding: 0; margin: 10px;">
+          <li>La formule de Calcul : {{formule}}</li>
+          <li>r :total des revenues</li>
+          <li>p :total des pertes</li>
+          <li>* :obligation de remplir ce champs</li>
+        </ul>
+      </span>
+    </div>
   </ng-template>
 </p-dialog>

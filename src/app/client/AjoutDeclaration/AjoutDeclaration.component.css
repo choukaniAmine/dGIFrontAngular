@@ -1,0 +1,89 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+  }
+  
+  .card {
+    width: 500px; 
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .dropdown-container {
+    width: 100%; 
+  }
+  
+  .calendar-button-container {
+    display: flex;
+  }
+  
+  .calendar-group {
+    flex: 1; 
+  }
+  
+  .button-group {
+    margin-left: 20px; 
+  }
+  .card-header {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    background-color: #ffffff;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+    height: 40px; 
+  }
+  .small-input .ui-inputnumber {
+    width: 100px; 
+  }
+  
+  .table {
+    width: 100%; 
+  }
+  
+  
+  
+  .tooltip {
+    position: absolute;
+  
+  
+    bottom: 20px;
+    right: 20px;
+  }
+  
+ 
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 350px;
+    background-color: #ffffff;
+    color: #376883;
+  
+    padding: 5px 0;
+    border-radius: 6px;
+    top: -5px;
+    right: 110%;
+    
+    position: absolute;
+    z-index: 1;
+  }
+  
+
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+  .tooltip .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    top: 30%;
+    left: 100%;
+    margin-top: -5px;
+  
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent  #cad2c5;
+  }

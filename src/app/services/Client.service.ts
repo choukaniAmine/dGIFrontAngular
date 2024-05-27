@@ -62,4 +62,43 @@ getFormulaByLibelle(libelle: string) {
     headers: this.createAuthorizationHeader()
   });
 }
+getDeclarationByContribuable(matriculeFiscale: any) {
+  const url = `${BASIC_URL}/api/client/declarationbycontribuable?matriculeFiscale=${matriculeFiscale}`;
+  return this.http.get<any>(url, {
+    headers: this.createAuthorizationHeader()
+  });
+}
+initPaiement(paymentRequest: any) {
+  const url = `${BASIC_URL}/api/client/init`;
+  const headers: HttpHeaders = this.createAuthorizationHeader();
+  return this.http.post(url, paymentRequest, { headers });
+}
+getCompteByid(idcompte: any) {
+  const url = `${BASIC_URL}/api/client/getCompte?idcompte=${idcompte}`;
+  return this.http.get<any>(url, {
+    headers: this.createAuthorizationHeader()
+  });
+}
+savePaiement(paymentRequest: any) {
+  const url = `${BASIC_URL}/api/client/savePaiement`;
+  const headers: HttpHeaders = this.createAuthorizationHeader();
+  return this.http.post(url, paymentRequest, { headers });
+}
+getNotification(matricule: number) {
+  const url = `${BASIC_URL}/api/client/notification?matricule=${matricule}`;
+  const headers: HttpHeaders = this.createAuthorizationHeader();
+  return this.http.get(url, { headers })
+}
+updateNotification(id: number) {
+  const url = `${BASIC_URL}/api/client/updatechecked?id=${id}`;
+  const headers: HttpHeaders = this.createAuthorizationHeader();
+  return this.http.put(url, null, { headers });
+}
+
+updatedeleted(id: number) {
+  const url = `${BASIC_URL}/api/client/updatedeleted?id=${id}`;
+  const headers: HttpHeaders = this.createAuthorizationHeader();
+  const options = { headers: headers }; // Create options object with headers
+  return this.http.put(url, null, options); // Pass options as the third argument
+}
 }

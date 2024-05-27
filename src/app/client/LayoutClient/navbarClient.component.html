@@ -17,8 +17,8 @@
       </button>
       <div class="dropdown-content">
         <a href="/client/ajoutdeclaration"><i class="pi pi-plus"></i> Ajout Declaration</a>
-        <a href="#"><i class="pi pi-list"></i> Mes Declarations</a>
-        <a href="#"><i class="pi pi-book"></i> Mes Obligations</a>
+        <a href="/client/mesdeclarations"><i class="pi pi-list"></i> Mes Declarations</a>
+        <a href="/client/mesobligations"><i class="pi pi-book"></i> Mes Obligations</a>
       </div>
     </div>
     <div class="dropdown">
@@ -29,14 +29,46 @@
 
       </div>
     </div>
+    <div class="notif"> <p-button icon="pi pi-bell" [rounded]="true" (click)="toggleBellAndSpan($event)"
+      [style]="{ 'background-color': '#003049', 'color': '#ffffff' }" [text]="true"></p-button>
 
+    <span class="notification-dot" *ngIf="spanpop == true "></span>
+  </div>
     <a href="/login" class="split" (click)="logout()"><i class="pi pi-sign-out"></i> Logout</a>
   </div>
   <div class="container">
 
 
   </div>
+  <p-overlayPanel #op [style]="{ width: '450px' }">
+    <div>
+      <h2>Notifications</h2>
+    </div>
+    <ng-container *ngIf="lesnotifications && lesnotifications.length > 0; else noNotifications">
+      <div class="notification-container">
+        <div *ngFor="let notification of lesnotifications; let i = index" class="notification-item"
+          [ngStyle]="{ 'background-color': notification.checked ? '#f0f0f0' : '#ffffff', 'color': notification.checked ? '#777777' : '#000000' }">
+          <div class="notification-content">
+            <div class="notification-text">
+              <h3>{{ notification.titre }}</h3>
+              <p>{{ notification.solution }}</p>
+              <p class="date"><strong>Date:</strong> {{ notification.dateReponse | date:'short' }}</p>
+            </div>
+            <div class="notification-actions">
+              <p-button icon="pi pi-bookmark-fill" [rounded]="true" [text]="true"
+                (click)="markAsRead(notification, i)"></p-button>
+              <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+                (click)="deleteNotification(notification.idNotification)"></p-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
 
+    <ng-template #noNotifications>
+      <p>No notifications available.</p>
+    </ng-template>
+  </p-overlayPanel>
 </body>
 
 </html>

@@ -13,10 +13,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TypeDeDetailImpot } from '../models/TypeDeDetailImpot.enum';
 import { NatureRubrique } from '../models/NatureRubrique.enum';
 import { MessageService } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
 @Component({
   selector: 'app-AjoutDetailImpot',
   standalone: true,
-  imports: [CardModule, RadioButtonModule, CommonModule, FormsModule, ButtonModule, InputTextModule, DropdownModule, ToastModule,AdminSidebarComponent],
+  imports: [CardModule, RadioButtonModule, CommonModule, FormsModule, ButtonModule, InputTextModule, DropdownModule, ToastModule,AdminSidebarComponent,DialogModule],
   templateUrl: './AjoutDetailImpot.component.html',
   styleUrls: ['./AjoutDetailImpot.component.css']
 })
@@ -30,9 +31,43 @@ export class AjoutDetailImpotComponent implements OnInit {
   value: String = ''
   value1: String = ''
   typeimpot: any
+  isCalculable: boolean = false;
+  displayDialog: boolean = false;
+ 
+
+  lesDetails: any[] = []
+  selectedDetails: string[] = [];
+  selectedOperations: string[] = [];
+  formulaElements: string[] = [];
+  formula: string = '';
+  selectedDetail: any = null;
+  selectedOperation: any = null;
+  
+ 
+
+
+  operationOptions: any[] = [
+    { label: 'Addition', value: ' + ' },
+    { label: 'Subtraction', value: ' - ' },
+    { label: 'Multiplication', value: ' * ' },
+    { label: 'Division', value: ' / ' },
+    { label: 'Max', value: 'max(' },
+    { label: 'Min', value: 'min(' }
+  ];;
+  openDialog() {
+    if (this.isCalculable) {
+      this.displayDialog = true;
+    }
+  }
+
+  closeDialog() {
+
+    this.displayDialog = false;
+  }
   constructor(private adminservice: AdminServiceService,private router: ActivatedRoute,private messageService: MessageService,private router1:Router) { }
   ngOnInit(): void {
     this.getlibelle()
+    this.getdetail()
   }
  
   getlibelle() {
@@ -72,8 +107,43 @@ export class AjoutDetailImpotComponent implements OnInit {
 
   }
   
-  
-  
+  getdetail() {
+    this.adminservice.getDetailByImpot(this.libelle).subscribe((data) => {
+      this.lesDetails = data;
+      console.log(data)
+    })
   }
+  onDetailChange(event: any) {
+    const selectedDetail = event.value.libelle;
+    if (selectedDetail) {
+      this.selectedDetails.push(selectedDetail);
+      this.formulaElements.push(selectedDetail);
+      
+      this.updateFormula();
+      // Refresh the dropdown by setting selectedDetail to null
+      this.selectedDetail = null;
+      this.lesDetails=[];
+      this.getdetail();
+
+    }
+  }
+
+  onOperationChange(event: any) {
+    const selectedOperation = event.value.value;
+    if (selectedOperation) {
+      this.selectedOperations.push(selectedOperation);
+      this.formulaElements.push(selectedOperation);
+      this.selectedOperation = null; // Reset the selected operation after adding
+      this.updateFormula();
+    }
+  }
+
+  updateFormula() {
+    // Concatenate formula elements to form the formula
+    this.formula = this.formulaElements.join(' ');
+  }
+}
+  
+  
 
 
