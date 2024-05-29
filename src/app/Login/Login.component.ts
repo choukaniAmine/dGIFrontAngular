@@ -13,10 +13,11 @@ import { Component, OnInit } from '@angular/core';
 import { StorageServiceService } from '../services/StorageService.service';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
 @Component({
   selector: 'app-Login',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, CardModule, ButtonModule, DividerModule, InputTextModule, PasswordModule,ToastModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, CardModule, ButtonModule, DividerModule, InputTextModule, PasswordModule,ToastModule,DialogModule],
   templateUrl: './Login.component.html',
   styleUrls: ['./Login.component.css']
 })
@@ -27,6 +28,9 @@ export class LoginComponent implements OnInit {
     password: '',
 
   };
+  displayForgotPassword: boolean = false;
+  forgotPasswordEmail: string = '';
+
 
   constructor(private authserve:InscriptionServiceService,private router: Router,private messageService: MessageService ) { }
 
@@ -95,4 +99,27 @@ export class LoginComponent implements OnInit {
   gotosignup() {
     this.router.navigate(['/inscription'])
   }
-}
+  showForgotPasswordDialog() {
+    this.displayForgotPassword = true;
+  }
+ 
+    sendForgotPasswordEmail() {
+      if (!this.forgotPasswordEmail) {
+        this.messageService.add({key: 'step1',severity:'error', summary: 'Error', detail: 'Veuillez entrer une adresse email valide'});
+        return;
+      }
+  
+      this.authserve.sendOublierPassword(this.forgotPasswordEmail).subscribe(
+        (response: any) => {
+         
+          
+          this.displayForgotPassword = false;
+          this.messageService.add({key: 'step1',severity:'success', summary: 'Success', detail: 'Un email a été envoyé'});
+        },
+        (error) => {
+          this.messageService.add({key: 'step1',severity:'error', summary: 'Error', detail: 'email introuvable'});
+        }
+      );
+    }
+  }
+

@@ -24,6 +24,7 @@ import { PayementFailedComponent } from './client/PayementFailed/PayementFailed.
 import { ReclamationClientComponent } from './client/reclamationClient/reclamationClient.component';
 import { DashboardResponsableComponent } from './Responsable/dashboardResponsable/dashboardResponsable.component';
 import { TousLesReclamationsComponent } from './Responsable/TousLesReclamations/TousLesReclamations.component';
+import { ResetPasswordComponent } from './ResetPassword/ResetPassword.component';
 
 export const routes: Routes = [
     {path:'sidebar',component:AdminSidebarComponent},
@@ -32,6 +33,7 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'admin/lesinscriptions', component: AllInscriptionComponent },
     { path: 'admin/createpassword/:code', component: CreatePasswordComponent },
+    { path: 'admin/resetpassword/:email', component: ResetPasswordComponent},
     {path:"admin/lescomptes",component:LesComptesComponent},
     {path:"admin/lescontribuable",component:LescontribuableComponent},
     {path:"admin/lesadmins",component:LesAdminsComponent},

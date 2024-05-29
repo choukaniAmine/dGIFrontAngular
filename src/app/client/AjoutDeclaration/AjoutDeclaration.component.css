@@ -1,89 +1,115 @@
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-  }
-  
-  .card {
-    width: 500px; 
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .dropdown-container {
-    width: 100%; 
-  }
-  
-  .calendar-button-container {
-    display: flex;
-  }
-  
-  .calendar-group {
-    flex: 1; 
-  }
-  
-  .button-group {
-    margin-left: 20px; 
-  }
-  .card-header {
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-    background-color: #ffffff;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-    text-align: center;
-    height: 40px; 
-  }
-  .small-input .ui-inputnumber {
-    width: 100px; 
-  }
-  
-  .table {
-    width: 100%; 
-  }
-  
-  
-  
-  .tooltip {
-    position: absolute;
-  
-  
-    bottom: 20px;
-    right: 20px;
-  }
-  
- 
-  .tooltip .tooltiptext {
-    visibility: hidden;
-    width: 350px;
-    background-color: #ffffff;
-    color: #376883;
-  
-    padding: 5px 0;
-    border-radius: 6px;
-    top: -5px;
-    right: 110%;
-    
-    position: absolute;
-    z-index: 1;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
 
-  .tooltip:hover .tooltiptext {
-    visibility: visible;
-  }
-  .tooltip .tooltiptext::after {
-    content: " ";
-    position: absolute;
-    top: 30%;
-    left: 100%;
-    margin-top: -5px;
-  
-    border-width: 5px;
-    border-style: solid;
-    border-color: transparent transparent transparent  #cad2c5;
-  }
+.card {
+  width: 500px; /* Adjust width as needed */
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.dropdown-container {
+  width: 100%; /* Ensure dropdowns take full width */
+}
+
+.calendar-button-container {
+  display: flex;
+}
+
+.calendar-group {
+  flex: 1; /* Calendar takes up remaining space */
+}
+
+.button-group {
+  margin-left: 20px; /* Adjust spacing between calendar and button */
+}
+.card-header {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  background-color: #ffffff;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+  height: 40px; /* Set a lower height for the header */
+}
+.small-input .ui-inputnumber {
+  width: 100px; /* Adjust as needed */
+}
+
+.table {
+  width: 100%; /* Adjust the width of the table */
+}
+
+
+
+.tooltip {
+  position: absolute;
+
+
+  bottom: 20px;
+  right: 20px;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 350px;
+  background-color: #ffffff;
+  color: #376883;
+
+  padding: 5px 0;
+  border-radius: 6px;
+  top: -5px;
+  right: 110%;
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 30%;
+  left: 100%;
+  margin-top: -5px;
+
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent  #cad2c5;
+}
+::ng-deep .p-button .pi {
+  padding: 0.5rem 1rem; /* Adjust the padding as needed */
+  font-size: 1.5rem;/* Adjust the size as needed */
+}
+.input-container {
+  position: relative; /* Position the icon relative to the input field */
+}
+
+.info-icon {
+  position: absolute; /* Position the icon absolutely */
+  top:60%;
+  right: 12px; /* Adjust the distance from the input field */
+  transform: translateY(-50%); /* Center the icon vertically */
+  cursor: pointer; /* Change cursor to pointer when hovering over the icon */
+}
+.small-button {
+  font-size: 12px;
+  padding: 4px 8px;
+  height: 30px;
+  line-height: 1.2;
+}
+.calculable-entry {
+  background-color: #f2f2f2; /* Light gray background */
+  border: 1px solid #ccc; /* Gray border */
+  color: #333; /* Dark gray text color */
+}

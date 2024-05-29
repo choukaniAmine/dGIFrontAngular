@@ -14,10 +14,11 @@ import { TypeDeDetailImpot } from '../models/TypeDeDetailImpot.enum';
 import { NatureRubrique } from '../models/NatureRubrique.enum';
 import { MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
+import { InputNumberModule } from 'primeng/inputnumber';
 @Component({
   selector: 'app-AjoutDetailImpot',
   standalone: true,
-  imports: [CardModule, RadioButtonModule, CommonModule, FormsModule, ButtonModule, InputTextModule, DropdownModule, ToastModule,AdminSidebarComponent,DialogModule],
+  imports: [CardModule, InputNumberModule,RadioButtonModule, CommonModule, FormsModule, ButtonModule, InputTextModule, DropdownModule, ToastModule,AdminSidebarComponent,DialogModule],
   templateUrl: './AjoutDetailImpot.component.html',
   styleUrls: ['./AjoutDetailImpot.component.css']
 })
@@ -54,16 +55,14 @@ export class AjoutDetailImpotComponent implements OnInit {
     { label: 'Max', value: 'max(' },
     { label: 'Min', value: 'min(' }
   ];;
+  expectingDetail: boolean = true;
   openDialog() {
     if (this.isCalculable) {
       this.displayDialog = true;
     }
   }
 
-  closeDialog() {
-
-    this.displayDialog = false;
-  }
+ 
   constructor(private adminservice: AdminServiceService,private router: ActivatedRoute,private messageService: MessageService,private router1:Router) { }
   ngOnInit(): void {
     this.getlibelle()
@@ -79,7 +78,7 @@ export class AjoutDetailImpotComponent implements OnInit {
     });
   }
   submit() {
-    if (!this.selectedType || !this.selectedType1 || this.trueValue === null || this.libelle === null || this.value === null || this.typeimpot === null) {
+    if (!this.selectedType  || this.trueValue === null || this.libelle === null || this.value === null || this.typeimpot === null) {
       // Ajoutez la classe aux éléments ou effectuez toute autre action nécessaire
       this.messageService.add({ key: 'step1', severity: 'error', summary: 'error', detail: "Un ou plusieurs champs sont null" });
     }
@@ -90,10 +89,12 @@ export class AjoutDetailImpotComponent implements OnInit {
       const detail = {
         libelle: this.value,
         typeDetail: this.selectedType,
-        naturerebrique: this.selectedType1,
+        
         ordre: this.value1,
         obligatoire: this.trueValue,
-        typeImpot: this.typeimpot
+        typeImpot: this.typeimpot,
+        calculable: this.isCalculable,
+        formule:this.formula
       };
       this.adminservice.saveDetailImpot(detail).subscribe((data) => {
       
@@ -114,35 +115,76 @@ export class AjoutDetailImpotComponent implements OnInit {
     })
   }
   onDetailChange(event: any) {
+    
     const selectedDetail = event.value.libelle;
+    if (!this.expectingDetail) {
+      this.lesDetails = [];
+      this.getdetail();
+     
+      this.selectedDetail = null;
+      console.error('Expected an operation, not a detail');
+     
+      return ;
+    }
+
+    
     if (selectedDetail) {
       this.selectedDetails.push(selectedDetail);
       this.formulaElements.push(selectedDetail);
-      
       this.updateFormula();
-      // Refresh the dropdown by setting selectedDetail to null
       this.selectedDetail = null;
-      this.lesDetails=[];
+      this.lesDetails = [];
       this.getdetail();
-
+      this.expectingDetail = false; // Next should be an operation
     }
   }
 
   onOperationChange(event: any) {
+    if (this.expectingDetail) {
+      console.error('Expected a detail, not an operation');
+      return;
+    }
+
     const selectedOperation = event.value.value;
     if (selectedOperation) {
       this.selectedOperations.push(selectedOperation);
       this.formulaElements.push(selectedOperation);
-      this.selectedOperation = null; // Reset the selected operation after adding
       this.updateFormula();
+      this.selectedOperation = null;
+      this.expectingDetail = true; // Next should be a detail
+      this.lesDetails = [];
+      this.getdetail();
     }
   }
 
   updateFormula() {
-    // Concatenate formula elements to form the formula
     this.formula = this.formulaElements.join(' ');
   }
+  clearFormula() {
+    this.expectingDetail = true
+    this.formulaElements.length = 0;
+
+    this.formula = ''
+  }
+  verif() {
+    if (this.formulaElements.length === 0) {
+      console.log("The formula is empty.");
+      return;
+    }
+    const lastElement = this.formulaElements[this.formulaElements.length - 1];
+    const isLastElementOperation = this.operationOptions.some(op => op.value === lastElement);
+    if (isLastElementOperation) {
+      console.log("The last element is an operation.");
+      // Show an alert or handle the case where the last element is an operation
+      alert("The last element cannot be an operation. Please add a detail.");
+    } else {
+      console.log("The last element is a detail.");
+      // Proceed with your logic when the last element is a detail
+      this.displayDialog = false;
+    }
+  }
 }
+
   
   
 

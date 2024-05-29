@@ -31,4 +31,10 @@ verifyCode(code: string): Observable<any> {
 creePassword(signupRequest: any): Observable<any> {
   return this.http.post(`${BASIC_URL}/api/auth/savepassword`, signupRequest);
 }
+sendOublierPassword(email:any): Observable<any> {
+  return this.http.get(`${BASIC_URL}/api/auth/passwordoublier?email=${email}`)
+}
+resetPassword(req:any): Observable<any> {
+  return this.http.put(`${BASIC_URL}/api/auth/resetpassword`,req)
+}
 }
